@@ -35,9 +35,9 @@ module BlueprintAgreement
               request_method: request_method
             })
 
-            http.request(request).tap do |http_request|
+            http.request(request).tap do |http_response|
               puts request_logger.print if ENV["AGREEMENT_LOUD"]
-              raise EndpointNotFound.new(http_request) if http_request.code == "404"
+              raise EndpointNotFound.new(http_response) if invalid_response?(http_response)
             end
           end
         rescue Errno::ECONNREFUSED
@@ -51,13 +51,23 @@ module BlueprintAgreement
 
       private
 
+      def invalid_response?(response)
+        response.code == invalid_criteria[:code] &&
+          response.content_type == invalid_criteria[:content_type] &&
+          response.body == invalid_criteria[:body]
+      end
+
+      def invalid_criteria
+        ::BlueprintAgreement::DrakovService::INVALID_RESPONSE
+      end
+
       def request_logger
         Utils::RequestLogger.instance
       end
 
       def set_headers(request)
         current_request.headers.each do |key, value|
-          request[key] = value
+          request[key.to_s] = value
         end
       end
 

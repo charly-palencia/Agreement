@@ -1,6 +1,11 @@
 module BlueprintAgreement
   class DrakovService
     attr :pid, :port, :hostname, :root_path, :allow_headers
+    INVALID_RESPONSE = {
+      content_type: 'text/html',
+      body: 'Endpoint not found',
+      code: '404'
+    }
 
     def initialize(config = BlueprintAgreement.configuration)
       @config = config

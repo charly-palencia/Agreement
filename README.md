@@ -46,13 +46,13 @@ Blueprint agreement works based on a markdown file with an valid API Blueprint f
 FORMAT: 1A
 
 # The Simplest API
- 
+
 ## API Blueprint
- 
+
 # GET /message
 + Request  200 (application/json)
 + Response 200 (application/json)
-    
+
     + Body
 
             {
